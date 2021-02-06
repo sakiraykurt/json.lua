@@ -58,25 +58,13 @@ end
 local function encode_table(val, stack)
   local res = {}
   stack = stack or {}
-
   -- Circular reference?
   if stack[val] then
     error("circular reference")
   end
-
   stack[val] = true
-
-  local t_n = 0
-  for _, _ in pairs(val) do
-    t_n = t_n + 1
-  end
-
   local max = table.maxn(val)
-
-  if t_n == 0 then
-    stack[val] = nil
-    return empty_table_str_map[empty_table_str_map_key]
-  elseif #val > 0 or max > 0 then -- check it is an array
+  if #val > 0 or max > 0 then -- check it is an array
     -- Treat as an array
     for k, _ in pairs(val) do
       if type(k) ~= "number" or k < 1 then
@@ -90,6 +78,7 @@ local function encode_table(val, stack)
     stack[val] = nil
     return "[" .. table.concat(res, ",") .. "]"
   else
+    local t_n = 0
     -- Treat as an object
     for k, v in pairs(val) do
       if type(k) ~= "string" then
@@ -97,9 +86,14 @@ local function encode_table(val, stack)
       end
       -- Encode
       table.insert(res, encode(k, stack) .. ":" .. encode(v, stack))
+      t_n = t_n + 1
     end
     stack[val] = nil
-    return "{" .. table.concat(res, ",") .. "}"
+    if t_n > 0 then -- check it is an empty table
+      return "{" .. table.concat(res, ",") .. "}"
+    else
+      return empty_table_str_map[empty_table_str_map_key]
+    end
   end
 end
 
@@ -377,14 +371,14 @@ function json.decode(str)
 end
 
 ---Empty {} tables can be converted to '[]', '{}' or 'null'. Parameter 'empty_table_type' can be 'array', 'object' or 'null'.
----@param empty_table_type? string
+---@param empty_table_type string
 function json.set(empty_table_type)
   if empty_table_type then
     local table_type = empty_table_str_map[empty_table_type]
     if table_type == nil then
       error("invalid empty table type: '" .. empty_table_type .. "'")
     end
-    empty_table_str_map_key = empty_table_type
+    empty_table_str_map_key = empty_table_type or "null"
   end
 end
 
