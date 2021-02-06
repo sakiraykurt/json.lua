@@ -21,13 +21,37 @@ The library provides the following functions:
 #### json.encode(value)
 Returns a string representing `value` encoded in JSON.
 ```lua
-json.encode({ 1, 2, 3, { x = 10 } }) -- Returns '[1,2,3,{"x":10}]'
+json.encode({
+    firstName = "John",
+    lastName = "Smith",
+    isAlive = true,
+    age = 25,
+    phoneNumbers = {
+      nil,
+      { type = "office", number = "646 555-4567" },
+      nil
+    },
+    children = {},
+    spouse = nil
+  }) 
+  -- Returns {"firstName":"John","isAlive":true,"age":25,"children":null,"phoneNumbers":[null,{"number":"646 555-4567","type":"office"}],"lastName":"Smith"}
 ```
 
 #### json.decode(str)
 Returns a value representing the decoded JSON string.
 ```lua
 json.decode('[1,2,3,{"x":10}]') -- Returns { 1, 2, 3, { x = 10 } }
+```
+
+#### json.set(empty_table_type)
+Changes mapping empty '{}' tables to '[]', '{}' or 'null'
+```lua
+json.set('array')
+json.encode({}) -- Returns []
+json.set('object')
+json.encode({}) -- Returns {}
+json.set('null')
+json.encode({}) -- Returns null
 ```
 
 ## Notes

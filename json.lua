@@ -39,7 +39,7 @@ local escape_char_map = {
   ["\t"] = "t"
 }
 
-local empty_table_str_map = {["array"] = "[]", ["table"] = "{}", ["null"] = "null"}
+local empty_table_str_map = {["array"] = "[]", ["object"] = "{}", ["null"] = "null"}
 local empty_table_str_map_key = "null"
 
 local escape_char_map_inv = {["/"] = "/"}
@@ -376,7 +376,7 @@ function json.decode(str)
   return res
 end
 
----Empty {} tables can be converted to '[]', '{}' or 'null'. Parameter 'empty_table_type' can be 'array', 'table' or 'null'.
+---Empty {} tables can be converted to '[]', '{}' or 'null'. Parameter 'empty_table_type' can be 'array', 'object' or 'null'.
 ---@param empty_table_type? string
 function json.set(empty_table_type)
   if empty_table_type then
