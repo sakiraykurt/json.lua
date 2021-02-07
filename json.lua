@@ -370,16 +370,14 @@ function json.decode(str)
   return res
 end
 
----Empty {} tables can be converted to '[]', '{}' or 'null'. Parameter 'empty_table_type' can be 'array', 'object' or 'null'.
+---Empty {} tables can be converted to '[]', '{}' or 'null'. Parameter 'empty_table_type' can be "array", "object" or "null".
 ---@param empty_table_type string
 function json.set(empty_table_type)
-  if empty_table_type then
-    local table_type = empty_table_str_map[empty_table_type]
-    if table_type == nil then
-      error("invalid empty table type: '" .. empty_table_type .. "'")
-    end
-    empty_table_str_map_key = empty_table_type or "null"
+  local table_type = empty_table_str_map[empty_table_type]
+  if table_type == nil then
+    error("invalid 'empty_table_type' parameter. expected: \"array\", \"object\" or \"null\".")
   end
+  empty_table_str_map_key = empty_table_type
 end
 
 return json

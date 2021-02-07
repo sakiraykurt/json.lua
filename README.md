@@ -9,7 +9,7 @@ A lightweight JSON library for Lua
 * Proper error messages, *eg:* `expected '}' or ',' at line 203 col 30`
 
 ## Usage
-The [json.lua](json.lua?raw=1) file should be dropped into an existing project
+The [json.lua](json.lua) file should be dropped into an existing project
 and required by it:
 ```lua
 json = require "json"
@@ -40,19 +40,21 @@ json.decode('[1,2,3,{"x":10}]') -- Returns { 1, 2, 3, { x = 10 } }
 ```
 
 #### json.set(empty_table_type)
-Changes mapping empty '{}' tables to '[]', '{}' or 'null'
+Changes mapping empty '{}' tables to '[]', '{}' or 'null'.
+Default [`empty_table_type`](json.lua#L43) is 'null'.
 ```lua
-json.set('array')
+json.set("array")
 json.encode({}) -- Returns []
-json.set('object')
+json.set("object")
 json.encode({}) -- Returns {}
-json.set('null')
+json.set("null")
 json.encode({}) -- Returns null
 ```
 
 ## Notes
-* Unknown index of last `nil` value in array.
-	 `json.encode({nil,'x',nil}) --> [null,"x"]`
+* There is a Lua table library limitation for finding nil values.
+  Unknown index of last `nil` values will not be added into array
+  *eg:* `json.encode({nil,"x",nil,"y",nil}) --> [null,"x",null,"y"]`
 * Trying to encode values which are unrepresentable in JSON will never result
   in type conversion or other magic: sparse arrays, tables with mixed key types
   or invalid numbers (NaN, -inf, inf) will raise an error
