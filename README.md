@@ -40,8 +40,7 @@ json.decode('[1,2,3,{"x":10}]') -- Returns { 1, 2, 3, { x = 10 } }
 ```
 
 #### json.set(empty_table_type)
-Changes mapping empty '{}' tables to '[]', '{}' or 'null'.
-Default [`empty_table_type`](json.lua#L43) is 'null'.
+Changes mapping empty `{}` tables to `[]`, `{}` or `null`. [`Default`](json.lua#L43) is `"null"`.
 ```lua
 json.set("array")
 json.encode({}) -- Returns []
