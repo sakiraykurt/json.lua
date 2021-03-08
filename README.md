@@ -51,7 +51,7 @@ json.encode({}) -- Returns null
 ```
 
 ## Notes
-* There is a Lua table library limitation for finding nil values.
+* There is a Lua table library limitation for finding `nil` values.
   Unknown index of last `nil` values will not be added into array
   *eg:* `json.encode({nil,"x",nil,"y",nil}) --> [null,"x",null,"y"]`
 * Trying to encode values which are unrepresentable in JSON will never result
